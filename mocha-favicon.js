@@ -72,43 +72,29 @@
 })(this);
 
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var root;
 
-  window.MochaFavicon = (function() {
-    MochaFavicon.prototype.icons = {};
+  root = typeof exports !== "undefined" && exports !== null ? exports : this;
 
-    function MochaFavicon(runner) {
-      this.runner = runner;
-      this.tests_done = __bind(this.tests_done, this);
-      this.set_ico = __bind(this.set_ico, this);
-      this.set_ico('/lib/pending.ico', "Running");
-      this.runner.on('end', this.tests_done);
-    }
+  root.MochaFavicon = function(runner) {
+    var icons, url;
 
-    MochaFavicon.prototype.set_ico = function(url, text) {
-      if (text) {
-        document.title = text;
-      }
-      $('link[rel="shortcut icon"]').remove();
-      return $('head').append("<link type='image/x-icon' rel='shortcut icon' href='" + url + "'>");
+    url = function(u) {
+      return u;
     };
-
-    MochaFavicon.prototype.tests_done = function() {
-      if (this.runner.failures) {
-        return this.set_ico('/lib/fail.ico', "Fail");
+    icons = {
+      fail: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAVFBMVEX///+AAADMAACqAACSAACfAADNAADMAADKAADIAADMAADMAADMAADLAADMAADMAADLAADJAADKAADMAADKAADMAADMAADLAADKAADKAADMAADMAACTp2L9AAAAG3RSTlMABAUGBwh1eHl+gYaVl5qgoam2vcDCw8TFxsiFO5zWAAAAmUlEQVQYGa3BSULCQAAAwUZwQRFBEJf+/z9NZjJrkhtV3NEjtT96uqPQX1oOdiQOvqkZbIkMbhROHhg5uZGYbQCzK5GVDVauBK76IXLFF4mLLhQu+KTmzJmWnRM9G+/M2GDGDh1naLiAiovIXMHEVQRvVg5YI3g1OwAWTPZOjoxMyPYGRyIjKi8OPkgc0XjWE4VK5+lMTe7mHxQDMdCbJ1M7AAAAAElFTkSuQmCC'),
+      pass: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAASFBMVEX///8A/wAA//8A/6oA/8wA1bMA2LEA1K0A0bMA1rAA0a4A1q4A07EA1rAA17IA1K8A1rEA1rAA17EA1rIA1rIA1LAA1rIA1rK6jUPZAAAAF3RSTlMAAQEDBR4nNUNKX3uGlJ6sra7E6/Hz/kQklvsAAAB0SURBVDjLtdM3DsNADERRyjln693/pi4kV5aWBhbLisB8DBgjGsUTzOsa61Grb+BWYbBO9IA+A1oY7N2H5DENgN03W/wCW7AqlHgcp9PjPFnbeyAKPYKuNARjLOeAg//u6FWx57hkQOBaBLrEICIF4tTijT/Uow53R9nCkQAAAABJRU5ErkJggg=='),
+      pending: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAh1BMVEX///8A//8AgP8AgIAAmcwAgKoAgNUAgJ8AgK8AlLwAmbMAl8YElMEJk8EGk8EGlcEHlcQJmMQKk8EKlsUKlsQIlsMLmMIKlsIIlsIIlsMLlMMLl8MJlsQKlcQJlcIJl8IJl8UJlcQKl8QJlcQKlsMLlsQLl8QJl8QJl8QJlcIJl8IJlcQLl8QZb/IfAAAALHRSTlMAAQIEBQYGCBATFDE+V1pbbHSAg4WIj6CipampsbTIycnK0tvn6fL5+vv8/ROxWxQAAACvSURBVBgZrcFXQsJAAAXAZ0HF3hv2Xub+5zMLEROy/jGTJTvRuMg/XvzJ0JmetyzQuE/rWCM9Gul4QjowSc8YmbvmPAvWkV/IwCmjzHyQCmSGq1SskBlSxSTFI6lCCqTqkBTcpWpECu5SNSIF36naJcUnqXomxQ6p4itTjFPDZqaQinfSYj9D3KaFDCBzyAKkA1vpwkG6NDL3ir30KW7WktVLRQaOdDykZkNrO8v0A0kPIWM0HLDMAAAAAElFTkSuQmCC')
+    };
+    favicon.change(icons.pending, "Running");
+    return runner.on('end', function() {
+      if (runner.failures) {
+        return favicon.change(icons.fail, "Fail " + runner.failures);
       } else {
-        return this.set_ico('/lib/pass.ico', "Pass");
+        return favicon.change(icons.pass, "Pass " + (runner.total - runner.failures));
       }
-    };
-
-    return MochaFavicon;
-
-  })();
+    });
+  };
 
 }).call(this);
-
-url = function(u){return u};
-
-MochaFavicon.icons.fail = m.url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAVFBMVEX///+AAADMAACqAACSAACfAADNAADMAADKAADIAADMAADMAADMAADLAADMAADMAADLAADJAADKAADMAADKAADMAADMAADLAADKAADKAADMAADMAACTp2L9AAAAG3RSTlMABAUGBwh1eHl+gYaVl5qgoam2vcDCw8TFxsiFO5zWAAAAmUlEQVQYGa3BSULCQAAAwUZwQRFBEJf+/z9NZjJrkhtV3NEjtT96uqPQX1oOdiQOvqkZbIkMbhROHhg5uZGYbQCzK5GVDVauBK76IXLFF4mLLhQu+KTmzJmWnRM9G+/M2GDGDh1naLiAiovIXMHEVQRvVg5YI3g1OwAWTPZOjoxMyPYGRyIjKi8OPkgc0XjWE4VK5+lMTe7mHxQDMdCbJ1M7AAAAAElFTkSuQmCC');
-MochaFavicon.icons.pass = m.url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAASFBMVEX///8A/wAA//8A/6oA/8wA1bMA2LEA1K0A0bMA1rAA0a4A1q4A07EA1rAA17IA1K8A1rEA1rAA17EA1rIA1rIA1LAA1rIA1rK6jUPZAAAAF3RSTlMAAQEDBR4nNUNKX3uGlJ6sra7E6/Hz/kQklvsAAAB0SURBVDjLtdM3DsNADERRyjln693/pi4kV5aWBhbLisB8DBgjGsUTzOsa61Grb+BWYbBO9IA+A1oY7N2H5DENgN03W/wCW7AqlHgcp9PjPFnbeyAKPYKuNARjLOeAg//u6FWx57hkQOBaBLrEICIF4tTijT/Uow53R9nCkQAAAABJRU5ErkJggg==');
-MochaFavicon.icons.pending = m.url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAh1BMVEX///8A//8AgP8AgIAAmcwAgKoAgNUAgJ8AgK8AlLwAmbMAl8YElMEJk8EGk8EGlcEHlcQJmMQKk8EKlsUKlsQIlsMLmMIKlsIIlsIIlsMLlMMLl8MJlsQKlcQJlcIJl8IJl8UJlcQKl8QJlcQKlsMLlsQLl8QJl8QJl8QJlcIJl8IJlcQLl8QZb/IfAAAALHRSTlMAAQIEBQYGCBATFDE+V1pbbHSAg4WIj6CipampsbTIycnK0tvn6fL5+vv8/ROxWxQAAACvSURBVBgZrcFXQsJAAAXAZ0HF3hv2Xub+5zMLEROy/jGTJTvRuMg/XvzJ0JmetyzQuE/rWCM9Gul4QjowSc8YmbvmPAvWkV/IwCmjzHyQCmSGq1SskBlSxSTFI6lCCqTqkBTcpWpECu5SNSIF36naJcUnqXomxQ6p4itTjFPDZqaQinfSYj9D3KaFDCBzyAKkA1vpwkG6NDL3ir30KW7WktVLRQaOdDykZkNrO8v0A0kPIWM0HLDMAAAAAElFTkSuQmCC');
