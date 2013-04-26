@@ -1,0 +1,15 @@
+{
+  "author": "George Erickson",
+  "name": "mocha-favicon",
+  "version": "0.0.1",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-coffee": "~0.7.0",
+    "matchdep": "~0.1.2",
+    "grunt-contrib-uglify": "~0.2.0",
+    "grunt-contrib-concat": "~0.2.0",
+    "grunt-contrib-imagemin": "~0.1.4",
+    "grunt-data-uri": "~0.1.1"
+  }
+}
