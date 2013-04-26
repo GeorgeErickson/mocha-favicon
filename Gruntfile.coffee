@@ -10,7 +10,7 @@ config =
   libs: 'src/libs/*.js'
   banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> - <%= pkg.author %>*/\n'
 
-SRC = [config.libs, config.temp.coffee, config.temp.icons]
+SRC = [config.libs, config.temp.coffee]
 
 module.exports = (grunt) ->
   require("matchdep").filterDev("grunt-*").forEach grunt.loadNpmTasks
@@ -18,6 +18,10 @@ module.exports = (grunt) ->
   grunt.initConfig
     pkg: grunt.file.readJSON 'package.json'
     config: config
+
+    clean:
+      temp: '.tmp'
+      dist: 'dist'
 
     imagemin:
       dist:
@@ -38,7 +42,7 @@ module.exports = (grunt) ->
         baseDir: './'
       
       dist:
-        src: 'src/data_uri.js'
+        src: config.src
         dest: '.tmp'
 
 
@@ -53,8 +57,16 @@ module.exports = (grunt) ->
 
     coffee:
       temp:
-        src: config.src
+        src: '.tmp/mocha-favicon.coffee'
         dest: config.temp.coffee
+
+    copy:
+      temp:
+        src: 'index.html'
+        dest: '.tmp/index.html'
+      dist:
+        src: 'index.html'
+        dest: 'dist/index.html'
 
     concat:
       options:
@@ -68,5 +80,25 @@ module.exports = (grunt) ->
         src: SRC
         dest: config.dist.src
 
-  grunt.registerTask 'build', ['coffee:temp', 'imagemin', 'dataUri', 'concat:temp']
-  grunt.registerTask 'dist', ['build', 'uglify', 'concat:dist']
+    regarde:
+      app:
+        files: 'src/**/*'
+        tasks: ['build']
+      dist:
+        files: 'src/**/*'
+        tasks: ['dist']
+
+    connect:
+      temp:
+        options:
+          port: 9000
+          base: '.tmp'
+      dist:
+        options:
+          port: 9000
+          base: 'dist'
+
+  grunt.registerTask 'build', ['clean:temp', 'imagemin', 'dataUri', 'coffee:temp', 'concat:temp', 'copy:temp']
+  grunt.registerTask 'watch', ['build', 'connect:temp', 'regarde:app']
+  grunt.registerTask 'dist', ['clean:dist','build', 'uglify', 'concat:dist', 'copy:dist']
+  grunt.registerTask 'watch:dist', ['build', 'connect:dist', 'regarde:dist']

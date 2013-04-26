@@ -1,18 +1,15 @@
-class window.MochaFavicon
-  icons: {} #set by data_uri.js
-  constructor: (@runner) ->
-    @set_ico '/lib/pending.ico', "Running"
-    @runner.on 'end', @tests_done
+root = exports ? @
 
-  set_ico: (url, text) =>
-    if text
-      document.title = text
-
-    $('link[rel="shortcut icon"]').remove()
-    $('head').append "<link type='image/x-icon' rel='shortcut icon' href='#{url}'>"
-
-  tests_done: =>
-    if @runner.failures
-      @set_ico '/lib/fail.ico', "Fail"
+root.MochaFavicon = (runner) ->
+  url = (u) -> u
+  icons = 
+    fail: url('.tmp/favicons/fail.png')
+    pass: url('.tmp/favicons/pass.png')
+    pending: url('.tmp/favicons/pending.png')
+  
+  favicon.change icons.pending, "Running"
+  runner.on 'end', ->
+    if runner.failures
+      favicon.change icons.fail, "Fail #{runner.failures}"
     else
-      @set_ico '/lib/pass.ico', "Pass"
+      favicon.change icons.pass, "Pass #{runner.total - runner.failures}"
